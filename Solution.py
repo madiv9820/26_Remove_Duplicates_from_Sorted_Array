@@ -1,26 +1,35 @@
 from typing import List
-from collections import Counter
 
 class Solution:
     def removeDuplicates(self, nums: List[int]) -> int:
-        # Create a Counter object to count occurrences of each element in 'nums'
-        # Then, extract only the unique elements by getting the dictionary keys
-        # Counter retains the order of first occurrence, so the original order is preserved.
-        unique_Values = list(Counter(nums).keys())
-        
-        # Replace the first part of 'nums' with the unique values
-        for index in range(len(unique_Values)):
-            nums[index] = unique_Values[index]
-        
-        # Return the number of unique elements, which is the length of 'unique_Values'
-        return len(unique_Values)
+        # Initialize two pointers: 
+        # 'actual_Index' to track the position to insert unique elements,
+        # and 'current_Index' to iterate through the 'nums' list.
+        actual_Index = current_Index = 0
+        n = len(nums)  # Get the length of the input list
+
+        # Loop until we reach the end of the list
+        while current_Index < n:
+            # Assign the current element to the 'actual_Index' position
+            nums[actual_Index] = nums[current_Index]
+            actual_Index += 1  # Move to the next position for the next unique element
+
+            # Move to the next different element in the list
+            next_Index = current_Index + 1
+            while next_Index < n and nums[next_Index] == nums[current_Index]:
+                next_Index += 1  # Skip duplicates
+
+            # Update 'current_Index' to the next different element's index
+            current_Index = next_Index
+
+        # Return the number of unique elements found
+        return actual_Index
 
 # Time Complexity:
-# 1. Counting the occurrences using Counter(nums) takes O(n), where 'n' is the number of elements in 'nums'.
-# 2. Extracting the keys and iterating over unique values both take O(k), where 'k' is the number of unique elements.
-# Since the number of unique elements 'k' is at most 'n', the overall time complexity is O(n).
+# The outer while loop iterates through all elements of the list, making the time complexity O(n),
+# where 'n' is the number of elements in 'nums'. The inner loop skips over duplicates, 
+# so each element is processed at most once.
 
 # Space Complexity:
-# 1. Counter(nums) stores a dictionary of size O(k), where 'k' is the number of unique elements.
-# 2. The list of unique elements also takes O(k) space.
-# Thus, the space complexity is O(k), where 'k' is the number of unique elements in 'nums'.
+# This algorithm uses only a few extra variables for indexing, so the space complexity is O(1) (constant space),
+# as it modifies the input list in place without using additional data structures.
